@@ -122,7 +122,7 @@ class UserService {
     transporter = nodemailer.createTransport(sendGridTransport({
         service: 'gmail',
         auth: {
-            api_key: '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'
+            api_key: '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'
         }
     }));
 
