@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+require('dotenv').config();
 
 const { AdminMiddleWare } = require("./Middlewares/adminMiddleWare");
 const { WebsiteMiddleWare } = require("./Middlewares/websiteMiddleWare");
@@ -24,7 +25,7 @@ app.use("/admin", AdminMiddleWare, adminApp);
 app.use("/website", WebsiteMiddleWare, websiteApp);
 
 const port = process.env.PORT || 8000;
-const URI_DB = "mongodb+srv://fareskhalel:Fares123456789@cluster0.fm5zods.mongodb.net/BankBlood?retryWrites=true&w=majority"
+const URI_DB = process.env.MONGO_URI;
 mongoose
   .connect(
       URI_DB
