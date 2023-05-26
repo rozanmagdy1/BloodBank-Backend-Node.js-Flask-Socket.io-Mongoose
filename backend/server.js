@@ -28,7 +28,11 @@ const port = process.env.PORT || 8000;
 const URI_DB = process.env.MONGO_URI;
 mongoose
   .connect(
-      URI_DB
+      URI_DB,{
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        writeConcern: { w: 'majority' }
+      }
   )
   .then(() => {
     app.listen(port, function () {

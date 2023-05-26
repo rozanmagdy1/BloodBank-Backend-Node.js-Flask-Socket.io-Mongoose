@@ -144,7 +144,7 @@ class UserController {
     }
 
     async resetPassword(req,res) {
-        let resetToken = req.params.token;
+        let resetToken = req.headers["authorization"];
         let {username, newPassword} = req.body;
         let result = await service.resetPassword(resetToken,username,newPassword);
         if (result === null){

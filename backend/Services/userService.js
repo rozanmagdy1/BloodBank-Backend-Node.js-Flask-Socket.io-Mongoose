@@ -2,7 +2,7 @@ const User = require('../Model/User');
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
-const sendGridTransport = require('nodemailer-sendgrid-transport');
+const Transport = require("nodemailer-sendinblue-transport");
 const crypto = require("crypto");
 
 class UserService {
@@ -119,13 +119,10 @@ class UserService {
         return [decoded.username, decoded.id, decoded.isAdmin];
     }
 
-    key = process.env.SENDGRID_SECRIT_KEY
-    transporter = nodemailer.createTransport(sendGridTransport({
-        service: 'gmail',
-        auth: {
-            api_key: this.key
-        }
-    }));
+    k = process.env.EMAIL_SECRET_KEY;
+    transporter = nodemailer.createTransport(
+        new Transport({ apiKey: this.k })
+    );
 
     async forgotPassword(req, email) {
         let resetLink
@@ -137,9 +134,9 @@ class UserService {
             let token = jwt.sign({code}, 'resettoken', {expiresIn: '60m'});
 
             if (user.isAdmin === true) {
-                resetLink = `http://${req.headers.host}/admin/resetPassword/${token}`;
+                resetLink = `http://${req.headers.host}/admin/resetPassword`;
             } else {
-                resetLink = `http://${req.headers.host}/website/resetPassword/${token}`;
+                resetLink = `http://${req.headers.host}/website/resetPassword`;
             }
 
             const mailOptions = {
@@ -158,6 +155,7 @@ class UserService {
                 await this.transporter.sendMail(mailOptions);
                 return {
                     message: 'Email sent',
+                    token:token,
                     resetLink: resetLink
                 };
             } catch (error) {

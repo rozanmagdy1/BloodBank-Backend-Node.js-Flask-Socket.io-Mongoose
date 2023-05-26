@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../Model/User");
 async function AdminMiddleWare(req, res, next) {
 
-    if(req.path == '/login' || req.path == '/signup'){
+    if(req.path == '/login' || req.path == '/signup'|| req.path == '/forgotPassword'|| req.path == '/resetPassword'){
         next();
     }else {
         try {
